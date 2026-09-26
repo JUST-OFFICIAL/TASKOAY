@@ -1,0 +1,4636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Task~oay Admin Dashboard</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f3ff;
+      color: #1f2937;
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* ACCESS DENIED */
+
+    #accessDenied {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+      );
+    }
+
+    .access-card {
+      width: 100%;
+      max-width: 440px;
+      background: white;
+      border-radius: 22px;
+      padding: 35px 25px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .18);
+    }
+
+    .access-icon {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ede9fe;
+      font-size: 34px;
+    }
+
+    .access-card h2 {
+      margin-bottom: 10px;
+      color: #111827;
+    }
+
+    .access-card p {
+      color: #6b7280;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    /* ADMIN LAYOUT */
+
+    #adminDashboard {
+      min-height: 100vh;
+    }
+
+    .admin-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 245px;
+      background: linear-gradient(
+        180deg,
+        #4f46e5,
+        #6d28d9
+      );
+      color: white;
+      padding: 22px 14px;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .brand {
+      padding: 5px 12px 25px;
+    }
+
+    .brand-name {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -.5px;
+    }
+
+    .brand-subtitle {
+      margin-top: 5px;
+      font-size: 12px;
+      opacity: .8;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sidebar-nav button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: white;
+      text-align: left;
+      padding: 13px 14px;
+      border-radius: 11px;
+      font-size: 14px;
+      transition: .2s;
+    }
+
+    .sidebar-nav button:hover,
+    .sidebar-nav button.active {
+      background: rgba(255, 255, 255, .16);
+    }
+
+    .sidebar-nav .logout-btn {
+      margin-top: 15px;
+      background: rgba(239, 68, 68, .2);
+    }
+
+    .main-content {
+      margin-left: 245px;
+      width: calc(100% - 245px);
+      min-width: 0;
+    }
+
+    /* TOP BAR */
+
+    .topbar {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      min-height: 72px;
+      padding: 15px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-title h1 {
+      font-size: 21px;
+      color: #111827;
+    }
+
+    .topbar-title p {
+      margin-top: 4px;
+      color: #6b7280;
+      font-size: 12px;
+    }
+
+    .admin-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ede9fe;
+      color: #6d28d9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .admin-profile-name {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .admin-profile-role {
+      color: #6b7280;
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    /* PAGE */
+
+    .page {
+      padding: 25px;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .section-heading h2 {
+      font-size: 21px;
+      color: #111827;
+    }
+
+    .section-heading p {
+      margin-top: 5px;
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    /* BUTTONS */
+
+    .btn {
+      border: 0;
+      border-radius: 9px;
+      padding: 10px 15px;
+      font-weight: 700;
+      font-size: 13px;
+      transition: .2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: #6d28d9;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #eef2ff;
+      color: #4f46e5;
+    }
+
+    .btn-success {
+      background: #16a34a;
+      color: white;
+    }
+
+    .btn-danger {
+      background: #dc2626;
+      color: white;
+    }
+
+    .btn-warning {
+      background: #f59e0b;
+      color: white;
+    }
+
+    .btn-light {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    /* STAT CARDS */
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 19px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 5px 18px rgba(31, 41, 55, .05);
+    }
+
+    .stat-label {
+      color: #6b7280;
+      font-size: 12px;
+      margin-bottom: 9px;
+    }
+
+    .stat-value {
+      color: #111827;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .stat-icon {
+      float: right;
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      background: #ede9fe;
+      color: #6d28d9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+    }
+
+    /* CARDS */
+
+    .card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      box-shadow: 0 5px 18px rgba(31, 41, 55, .05);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 17px 19px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .card-header h3 {
+      font-size: 16px;
+      color: #111827;
+    }
+
+    .card-body {
+      padding: 19px;
+    }
+
+    /* TABLES */
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+
+    th,
+    td {
+      padding: 13px 12px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 12px;
+      vertical-align: middle;
+    }
+
+    th {
+      background: #fafafa;
+      color: #6b7280;
+      font-weight: 700;
+    }
+
+    td {
+      color: #374151;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+        /* STATUS BADGES */
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge-approved,
+    .badge-active,
+    .badge-qualified {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-rejected,
+    .badge-inactive {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .badge-review {
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+
+    /* EMPTY STATE */
+
+    .empty-state {
+      padding: 45px 20px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    /* ACTION GROUP */
+
+    .action-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .action-group .btn {
+      padding: 7px 10px;
+      font-size: 11px;
+    }
+
+    /* FORMS */
+
+    .form-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #374151;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 9px;
+      padding: 11px 12px;
+      outline: none;
+      background: white;
+      color: #111827;
+      font-size: 13px;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #7c3aed;
+      box-shadow:
+        0 0 0 3px rgba(124, 58, 237, .1);
+    }
+
+    .form-group textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    /* MODAL */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(17, 24, 39, .6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 500;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 720px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, .25);
+    }
+
+    .modal-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .modal-header h3 {
+      font-size: 18px;
+    }
+
+    .modal-close {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 8px;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 18px;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .modal-footer {
+      padding: 15px 20px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    /* MESSAGE */
+
+    #messageBox {
+      position: fixed;
+      top: 85px;
+      right: 20px;
+      width: min(380px, calc(100vw - 40px));
+      padding: 13px 16px;
+      border-radius: 11px;
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
+      display: none;
+      z-index: 1000;
+    }
+
+    #messageBox.show {
+      display: block;
+    }
+
+    #messageBox.success {
+      background: #16a34a;
+    }
+
+    #messageBox.error {
+      background: #dc2626;
+    }
+
+    #messageBox.info {
+      background: #4f46e5;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 1000px) {
+      .stats-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .sidebar {
+        width: 210px;
+      }
+
+      .main-content {
+        margin-left: 210px;
+        width: calc(100% - 210px);
+      }
+
+      .page {
+        padding: 16px;
+      }
+
+      .topbar {
+        padding: 13px 16px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group.full {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .admin-layout {
+        display: block;
+      }
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+      }
+
+      .sidebar-nav {
+        display: grid;
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+
+      .main-content {
+        margin-left: 0;
+        width: 100%;
+      }
+
+      .topbar {
+        position: relative;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-profile {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ACCESS DENIED -->
+
+  <div id="accessDenied">
+
+    <div class="access-card">
+
+      <div class="access-icon">🔒</div>
+
+      <h2>Admin Access Required</h2>
+
+      <p>
+        You do not have permission to access the
+        Task~oay administration dashboard.
+      </p>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        id="accessLoginBtn"
+      >
+        Go to Login
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ADMIN DASHBOARD -->
+
+  <div id="adminDashboard" class="hidden">
+
+    <div class="admin-layout">
+
+      <!-- SIDEBAR -->
+
+      <aside class="sidebar">
+
+        <div class="brand">
+
+          <div class="brand-name">
+            Task~oay
+          </div>
+
+          <div class="brand-subtitle">
+            Administration Panel
+          </div>
+
+        </div>
+
+        <nav class="sidebar-nav">
+
+          <button
+            type="button"
+            class="nav-btn active"
+            data-section="dashboardSection"
+          >
+            📊 Dashboard
+          </button>
+
+          <button
+            type="button"
+            class="nav-btn"
+            data-section="tasksSection"
+          >
+            📝 Tasks
+          </button>
+
+          <button
+            type="button"
+            class="nav-btn"
+            data-section="usersSection"
+          >
+            👥 Users
+          </button>
+
+          <button
+            type="button"
+            class="nav-btn"
+            data-section="submissionsSection"
+          >
+            📸 Task Submissions
+          </button>
+
+          <button
+            type="button"
+            class="nav-btn"
+            data-section="withdrawalsSection"
+          >
+            💸 Withdrawals
+          </button>
+
+          <button
+            type="button"
+            class="nav-btn"
+            data-section="activationsSection"
+          >
+            💳 Activations
+          </button>
+
+          <button
+            type="button"
+            class="nav-btn"
+            data-section="referralsSection"
+          >
+            🔗 Referrals
+          </button>
+
+          <button
+            type="button"
+            class="logout-btn"
+            id="logoutBtn"
+          >
+            🚪 Logout
+          </button>
+
+        </nav>
+
+      </aside>
+
+
+      <!-- MAIN CONTENT -->
+
+      <main class="main-content">
+
+        <header class="topbar">
+
+          <div class="topbar-title">
+
+            <h1 id="pageTitle">
+              Admin Dashboard
+            </h1>
+
+            <p>
+              Manage your Task~oay platform
+            </p>
+
+          </div>
+
+          <div class="admin-profile">
+
+            <div class="admin-avatar">
+              👑
+            </div>
+
+            <div>
+
+              <div
+                class="admin-profile-name"
+                id="adminName"
+              >
+                Administrator
+              </div>
+
+              <div class="admin-profile-role">
+                Super Admin
+              </div>
+
+            </div>
+
+          </div>
+
+        </header>
+
+
+        <div class="page">
+
+          <!-- DASHBOARD SECTION -->
+
+          <section
+            id="dashboardSection"
+            class="section active"
+          >
+
+            <div class="section-heading">
+
+              <div>
+
+                <h2>
+                  Dashboard Overview
+                </h2>
+
+                <p>
+                  Monitor activity across Task~oay.
+                </p>
+
+              </div>
+
+              <button
+                type="button"
+                class="btn btn-secondary"
+                id="refreshDashboardBtn"
+              >
+                🔄 Refresh
+              </button>
+
+            </div>
+
+
+            <div class="stats-grid">
+
+              <div class="stat-card">
+
+                <div class="stat-icon">
+                  👥
+                </div>
+
+                <div class="stat-label">
+                  Total Users
+                </div>
+
+                <div
+                  class="stat-value"
+                  id="totalUsersStat"
+                >
+                  0
+                </div>
+
+              </div>
+
+
+              <div class="stat-card">
+
+                <div class="stat-icon">
+                  📝
+                </div>
+
+                <div class="stat-label">
+                  Pending Submissions
+                </div>
+
+                <div
+                  class="stat-value"
+                  id="pendingSubmissionsStat"
+                >
+                  0
+                </div>
+
+              </div>
+
+
+              <div class="stat-card">
+
+                <div class="stat-icon">
+                  💸
+                </div>
+
+                <div class="stat-label">
+                  Pending Withdrawals
+                </div>
+
+                <div
+                  class="stat-value"
+                  id="pendingWithdrawalsStat"
+                >
+                  0
+                </div>
+
+              </div>
+
+
+              <div class="stat-card">
+
+                <div class="stat-icon">
+                  💳
+                </div>
+
+                <div class="stat-label">
+                  Pending Activations
+                </div>
+
+                <div
+                  class="stat-value"
+                  id="pendingActivationsStat"
+                >
+                  0
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="card">
+
+              <div class="card-header">
+
+                <h3>
+                  Recent Activity
+                </h3>
+
+                <button
+                  type="button"
+                  class="btn btn-light"
+                  id="refreshAllBtn"
+                >
+                  Refresh All
+                </button>
+
+              </div>
+
+              <div class="card-body">
+
+                <div
+                  id="dashboardActivityContainer"
+                  class="empty-state"
+                >
+                  Loading dashboard data...
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          <!-- TASKS SECTION -->
+
+          <section
+            id="tasksSection"
+            class="section"
+          >
+
+            <div class="section-heading">
+
+              <div>
+
+                <h2>
+                  Task Management
+                </h2>
+
+                <p>
+                  Add, edit, activate, deactivate and
+                  remove tasks.
+                </p>
+
+              </div>
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                id="addTaskBtn"
+              >
+                + Add New Task
+              </button>
+
+            </div>
+
+
+            <div class="card">
+
+              <div class="card-header">
+
+                <h3>
+                  All Tasks
+                </h3>
+
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  id="refreshTasksBtn"
+                >
+                  🔄 Refresh
+                </button>
+
+              </div>
+
+              <div class="table-wrap">
+
+                <div id="tasksContainer">
+                  <div class="empty-state">
+                    Loading tasks...
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          <!-- USERS SECTION -->
+
+          <section
+            id="usersSection"
+            class="section"
+          >
+
+            <div class="section-heading">
+
+              <div>
+
+                <h2>
+                  Registered Users
+                </h2>
+
+                <p>
+                  View registered Task~oay accounts.
+                </p>
+
+              </div>
+
+              <button
+                type="button"
+                class="btn btn-secondary"
+                id="refreshUsersBtn"
+              >
+                🔄 Refresh
+              </button>
+
+            </div>
+
+
+            <div class="card">
+
+              <div class="table-wrap">
+
+                <div id="usersContainer">
+
+                  <div class="empty-state">
+                    Loading users...
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          <!-- TASK SUBMISSIONS SECTION -->
+
+          <section
+            id="submissionsSection"
+            class="section"
+          >
+
+            <div class="section-heading">
+
+              <div>
+
+                <h2>
+                  Task Submissions
+                </h2>
+
+                <p>
+                  Review screenshot evidence submitted
+                  by users.
+                </p>
+
+              </div>
+
+              <button
+                type="button"
+                class="btn btn-secondary"
+                id="refreshSubmissionsBtn"
+              >
+                🔄 Refresh
+              </button>
+
+            </div>
+
+
+            <div class="card">
+
+              <div class="table-wrap">
+
+                <div id="submissionsContainer">
+
+                  <div class="empty-state">
+                    Loading submissions...
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <!-- WITHDRAWALS SECTION -->
+
+          <section
+            id="withdrawalsSection"
+            class="section"
+          >
+
+            <div class="section-heading">
+
+              <div>
+
+                <h2>
+                  Withdrawal Requests
+                </h2>
+
+                <p>
+                  Review and process user withdrawal
+                  requests.
+                </p>
+
+              </div>
+
+              <button
+                type="button"
+                class="btn btn-secondary"
+                id="refreshWithdrawalsBtn"
+              >
+                🔄 Refresh
+              </button>
+
+            </div>
+
+
+            <div class="card">
+
+              <div class="table-wrap">
+
+                <div id="withdrawalsContainer">
+
+                  <div class="empty-state">
+                    Loading withdrawals...
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          <!-- ACTIVATIONS SECTION -->
+
+          <section
+            id="activationsSection"
+            class="section"
+          >
+
+            <div class="section-heading">
+
+              <div>
+
+                <h2>
+                  Activation Payments
+                </h2>
+
+                <p>
+                  Review ₦1,000 account activation
+                  payments.
+                </p>
+
+              </div>
+
+              <button
+                type="button"
+                class="btn btn-secondary"
+                id="refreshActivationsBtn"
+              >
+                🔄 Refresh
+              </button>
+
+            </div>
+
+
+            <div class="card">
+
+              <div class="table-wrap">
+
+                <div id="activationsContainer">
+
+                  <div class="empty-state">
+                    Loading activation payments...
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          <!-- REFERRALS SECTION -->
+
+          <section
+            id="referralsSection"
+            class="section"
+          >
+
+            <div class="section-heading">
+
+              <div>
+
+                <h2>
+                  Referrals
+                </h2>
+
+                <p>
+                  Monitor referral activity and rewards.
+                </p>
+
+              </div>
+
+              <button
+                type="button"
+                class="btn btn-secondary"
+                id="refreshReferralsBtn"
+              >
+                🔄 Refresh
+              </button>
+
+            </div>
+
+
+            <div class="card">
+
+              <div class="table-wrap">
+
+                <div id="referralsContainer">
+
+                  <div class="empty-state">
+                    Loading referrals...
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+        </div>
+
+      </main>
+
+    </div>
+
+  </div>
+
+
+  <!-- TASK MODAL -->
+
+  <div
+    class="modal-backdrop"
+    id="taskModalBackdrop"
+  >
+
+    <div class="modal">
+
+      <div class="modal-header">
+
+        <h3 id="taskModalTitle">
+          Add New Task
+        </h3>
+
+        <button
+          type="button"
+          class="modal-close"
+          id="closeTaskModalBtn"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div class="modal-body">
+
+        <form id="taskForm">
+
+          <input
+            type="hidden"
+            id="taskId"
+          >
+
+
+          <div class="form-grid">
+
+            <div class="form-group full">
+
+              <label for="taskTitle">
+                Task Title
+              </label>
+
+              <input
+                type="text"
+                id="taskTitle"
+                placeholder="e.g. Follow @GALLOBIZZY on TikTok"
+                required
+              >
+
+            </div>
+
+
+            <div class="form-group full">
+
+              <label for="taskDescription">
+                Description
+              </label>
+
+              <textarea
+                id="taskDescription"
+                placeholder="Describe what the user needs to do."
+                required
+              ></textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="taskPlatform">
+                Platform
+              </label>
+
+              <input
+                type="text"
+                id="taskPlatform"
+                placeholder="TikTok, Audiomack, WhatsApp..."
+                required
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="taskTargetName">
+                Target Name
+              </label>
+
+              <input
+                type="text"
+                id="taskTargetName"
+                placeholder="@username or target name"
+              >
+
+            </div>
+
+
+            <div class="form-group full">
+
+              <label for="taskTargetUrl">
+                Target URL
+              </label>
+
+              <input
+                type="url"
+                id="taskTargetUrl"
+                placeholder="https://..."
+                required
+              >
+
+            </div>
+
+
+            <div class="form-group full">
+
+              <label for="taskInstructions">
+                Instructions
+              </label>
+
+              <textarea
+                id="taskInstructions"
+                placeholder="Explain the steps the user should follow."
+                required
+              ></textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="taskReward">
+                Reward (₦)
+              </label>
+
+              <input
+                type="number"
+                id="taskReward"
+                min="0"
+                step="0.01"
+                value="250"
+                required
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="taskSortOrder">
+                Sort Order
+              </label>
+
+              <input
+                type="number"
+                id="taskSortOrder"
+                min="0"
+                step="1"
+                value="1"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="taskStartDate">
+                Start Date
+              </label>
+
+              <input
+                type="datetime-local"
+                id="taskStartDate"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="taskEndDate">
+                End Date
+              </label>
+
+              <input
+                type="datetime-local"
+                id="taskEndDate"
+              >
+
+            </div>
+
+
+            <div class="form-group full">
+
+              <label class="checkbox-row">
+
+                <input
+                  type="checkbox"
+                  id="taskScreenshotRequired"
+                  checked
+                >
+
+                Screenshot proof required
+
+              </label>
+
+            </div>
+
+
+            <div class="form-group full">
+
+              <label class="checkbox-row">
+
+                <input
+                  type="checkbox"
+                  id="taskActive"
+                  checked
+                >
+
+                Task is active
+
+              </label>
+
+            </div>
+
+          </div>
+
+        </form>
+
+      </div>
+
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn btn-light"
+          id="cancelTaskBtn"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          form="taskForm"
+          class="btn btn-primary"
+          id="saveTaskBtn"
+        >
+          Save Task
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- MESSAGE -->
+
+  <div id="messageBox"></div>
+
+
+  <!-- JAVASCRIPT STARTS HERE -->
+
+  <script type="module">
+
+    import { supabase } from "./js/supabase.js";
+
+
+    let currentAdmin = null;
+
+    let tasksCache = [];
+
+    let usersCache = [];
+
+    let activationsCache = [];
+
+    let submissionsCache = [];
+
+    let referralsCache = [];
+
+    let withdrawalsCache = [];
+
+
+    const $ = (id) =>
+      document.getElementById(id);
+
+
+    /* =========================
+       BASIC HELPERS
+       ========================= */
+
+
+    function showMessage(
+      message,
+      type = "info"
+    ) {
+
+      const box = $("messageBox");
+
+      if (!box) return;
+
+      box.textContent = message;
+
+      box.className = "";
+
+      box.id = "messageBox";
+
+      box.classList.add("show", type);
+
+      clearTimeout(
+        showMessage.timer
+      );
+
+      showMessage.timer =
+        setTimeout(() => {
+
+          box.classList.remove(
+            "show"
+          );
+
+        }, 4000);
+
+    }
+
+
+    function escapeHtml(value) {
+
+      if (
+        value === null ||
+        value === undefined
+      ) {
+        return "";
+      }
+
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    function formatDate(value) {
+
+      if (!value) {
+        return "—";
+      }
+
+      const date =
+        new Date(value);
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+        return escapeHtml(value);
+      }
+
+      return date.toLocaleString(
+        "en-NG",
+        {
+          dateStyle: "medium",
+          timeStyle: "short"
+        }
+      );
+
+    }
+
+
+    function formatMoney(value) {
+
+      const amount =
+        Number(value || 0);
+
+      return "₦" +
+        amount.toLocaleString(
+          "en-NG",
+          {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          }
+        );
+
+    }
+
+
+    function statusBadge(status) {
+
+      const clean =
+        String(
+          status || "unknown"
+        ).toLowerCase();
+
+      let className =
+        "badge-pending";
+
+      if (
+        clean === "approved" ||
+        clean === "active" ||
+        clean === "qualified"
+      ) {
+
+        className =
+          "badge-approved";
+
+      } else if (
+        clean === "rejected" ||
+        clean === "inactive"
+      ) {
+
+        className =
+          "badge-rejected";
+
+      } else if (
+        clean === "under_review" ||
+        clean === "review"
+      ) {
+
+        className =
+          "badge-review";
+
+      }
+
+      const label =
+        clean
+          .replace(/_/g, " ")
+          .replace(
+            /\b\w/g,
+            letter =>
+              letter.toUpperCase()
+          );
+
+      return `
+        <span class="badge ${className}">
+          ${escapeHtml(label)}
+        </span>
+      `;
+
+    }
+
+
+    function toDateTimeLocal(value) {
+
+      if (!value) {
+        return "";
+      }
+
+      const date =
+        new Date(value);
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+        return "";
+      }
+
+      const year =
+        date.getFullYear();
+
+      const month =
+        String(
+          date.getMonth() + 1
+        ).padStart(2, "0");
+
+      const day =
+        String(
+          date.getDate()
+        ).padStart(2, "0");
+
+      const hours =
+        String(
+          date.getHours()
+        ).padStart(2, "0");
+
+      const minutes =
+        String(
+          date.getMinutes()
+        ).padStart(2, "0");
+
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+
+    }
+
+
+    function closeTaskModal() {
+
+      const backdrop =
+        $("taskModalBackdrop");
+
+      if (backdrop) {
+
+        backdrop.classList.remove(
+          "show"
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       ADMIN CHECK
+       ========================= */
+
+
+    async function checkAdmin() {
+
+      const {
+        data: {
+          user
+        },
+        error
+      } =
+        await supabase.auth
+          .getUser();
+
+
+      if (
+        error ||
+        !user
+      ) {
+
+        window.location.href =
+          "./login.html";
+
+        return false;
+
+      }
+
+
+      const {
+        data: profile,
+        error: profileError
+      } =
+        await supabase
+          .from("profiles")
+          .select(
+            "full_name, is_admin"
+          )
+          .eq(
+            "id",
+            user.id
+          )
+          .maybeSingle();
+
+
+      if (
+        profileError ||
+        !profile ||
+        profile.is_admin !== true
+      ) {
+
+        $("accessDenied")
+          ?.classList.remove(
+            "hidden"
+          );
+
+        $("adminDashboard")
+          ?.classList.add(
+            "hidden"
+          );
+
+        return false;
+
+      }
+
+
+      currentAdmin = user;
+
+      $("accessDenied")
+        ?.classList.add(
+          "hidden"
+        );
+
+      $("adminDashboard")
+        ?.classList.remove(
+          "hidden"
+        );
+
+
+      const adminName =
+        profile.full_name ||
+        user.email ||
+        "Administrator";
+
+
+      if ($("adminName")) {
+
+        $("adminName")
+          .textContent =
+          adminName;
+
+      }
+
+
+      return true;
+
+    }
+
+
+    /* =========================
+       TASK MANAGEMENT
+       ========================= */
+
+
+    async function loadTasks() {
+
+      const container =
+        $("tasksContainer");
+
+      if (!container) {
+        return;
+      }
+
+
+      container.innerHTML = `
+        <div class="empty-state">
+          Loading tasks...
+        </div>
+      `;
+
+
+      const {
+        data,
+        error
+      } =
+        await supabase.rpc(
+          "admin_get_tasks"
+        );
+
+
+      if (error) {
+
+        console.error(
+          "loadTasks:",
+          error
+        );
+
+        container.innerHTML = `
+          <div class="empty-state">
+            Failed to load tasks.
+          </div>
+        `;
+
+        showMessage(
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      tasksCache =
+        data || [];
+
+
+      renderTasks();
+
+    }
+
+
+    function renderTasks() {
+
+      const container =
+        $("tasksContainer");
+
+      if (!container) {
+        return;
+      }
+
+
+      if (
+        !tasksCache.length
+      ) {
+
+        container.innerHTML = `
+          <div class="empty-state">
+            No tasks have been added yet.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      let html = `
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>Task</th>
+              <th>Platform</th>
+              <th>Reward</th>
+              <th>Status</th>
+              <th>Schedule</th>
+              <th>Actions</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+      `;
+
+
+      tasksCache.forEach(
+        task => {
+
+          const status =
+            task.active
+              ? "active"
+              : "inactive";
+
+
+          const schedule =
+            task.start_date ||
+            task.end_date
+              ? `
+                <div>
+                  ${
+                    task.start_date
+                      ? `Start: ${escapeHtml(
+                          formatDate(
+                            task.start_date
+                          )
+                        )}`
+                      : ""
+                  }
+                </div>
+
+                <div>
+                  ${
+                    task.end_date
+                      ? `End: ${escapeHtml(
+                          formatDate(
+                            task.end_date
+                          )
+                        )}`
+                      : ""
+                  }
+                </div>
+              `
+              : "Always available";
+
+
+          html += `
+
+            <tr>
+
+              <td>
+
+                <strong>
+                  ${escapeHtml(
+                    task.title
+                  )}
+                </strong>
+
+                <div
+                  style="
+                    margin-top:4px;
+                    color:#6b7280;
+                    font-size:11px;
+                  "
+                >
+                  ${escapeHtml(
+                    task.target_name ||
+                    ""
+                  )}
+                </div>
+
+              </td>
+
+
+              <td>
+                ${escapeHtml(
+                  task.platform ||
+                  "—"
+                )}
+              </td>
+
+
+              <td>
+                ${formatMoney(
+                  task.reward
+                )}
+              </td>
+
+
+              <td>
+                ${statusBadge(
+                  status
+                )}
+              </td>
+
+
+              <td>
+                ${schedule}
+              </td>
+
+
+              <td>
+
+                <div class="action-group">
+
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-task-action="edit"
+                    data-task-id="${escapeHtml(
+                      task.id
+                    )}"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn ${
+                      task.active
+                        ? "btn-warning"
+                        : "btn-success"
+                    }"
+                    data-task-action="toggle"
+                    data-task-id="${escapeHtml(
+                      task.id
+                    )}"
+                  >
+                    ${
+                      task.active
+                        ? "Deactivate"
+                        : "Activate"
+                    }
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-task-action="delete"
+                    data-task-id="${escapeHtml(
+                      task.id
+                    )}"
+                  >
+                    Delete
+                  </button>
+
+                </div>
+
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      );
+
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+
+      container.innerHTML =
+        html;
+
+    }
+
+
+    function openAddTaskModal() {
+
+      $("taskModalTitle")
+        .textContent =
+        "Add New Task";
+
+      $("taskId").value = "";
+
+      $("taskTitle").value = "";
+
+      $("taskDescription").value = "";
+
+      $("taskPlatform").value = "";
+
+      $("taskTargetName").value = "";
+
+      $("taskTargetUrl").value = "";
+
+      $("taskInstructions").value = "";
+
+      $("taskReward").value = "250";
+
+      $("taskSortOrder").value =
+        String(
+          tasksCache.length + 1
+        );
+
+      $("taskStartDate").value = "";
+
+      $("taskEndDate").value = "";
+
+      $("taskScreenshotRequired")
+        .checked = true;
+
+      $("taskActive")
+        .checked = true;
+
+
+      $("taskModalBackdrop")
+        .classList.add("show");
+
+    }
+
+
+    function openEditTaskModal(task) {
+
+      $("taskModalTitle")
+        .textContent =
+        "Edit Task";
+
+      $("taskId").value =
+        task.id || "";
+
+      $("taskTitle").value =
+        task.title || "";
+
+      $("taskDescription").value =
+        task.description || "";
+
+      $("taskPlatform").value =
+        task.platform || "";
+
+      $("taskTargetName").value =
+        task.target_name || "";
+
+      $("taskTargetUrl").value =
+        task.target_url || "";
+
+      $("taskInstructions").value =
+        task.instructions || "";
+
+      $("taskReward").value =
+        task.reward ?? 250;
+
+      $("taskSortOrder").value =
+        task.sort_order ?? 1;
+
+      $("taskStartDate").value =
+        toDateTimeLocal(
+          task.start_date
+        );
+
+      $("taskEndDate").value =
+        toDateTimeLocal(
+          task.end_date
+        );
+
+      $("taskScreenshotRequired")
+        .checked =
+        task.screenshot_required !== false;
+
+      $("taskActive")
+        .checked =
+        task.active !== false;
+
+
+      $("taskModalBackdrop")
+        .classList.add("show");
+
+    }
+
+    /* =========================
+       SAVE TASK
+       ========================= */
+
+    async function saveTask() {
+
+      const taskId =
+        $("taskId").value.trim();
+
+      const title =
+        $("taskTitle").value.trim();
+
+      const description =
+        $("taskDescription").value.trim();
+
+      const platform =
+        $("taskPlatform").value.trim();
+
+      const targetName =
+        $("taskTargetName").value.trim();
+
+      const targetUrl =
+        $("taskTargetUrl").value.trim();
+
+      const instructions =
+        $("taskInstructions").value.trim();
+
+      const reward =
+        Number(
+          $("taskReward").value
+        );
+
+      const sortOrder =
+        Number(
+          $("taskSortOrder").value || 0
+        );
+
+      const startDate =
+        $("taskStartDate").value
+          ? new Date(
+              $("taskStartDate").value
+            ).toISOString()
+          : null;
+
+      const endDate =
+        $("taskEndDate").value
+          ? new Date(
+              $("taskEndDate").value
+            ).toISOString()
+          : null;
+
+      const screenshotRequired =
+        $("taskScreenshotRequired")
+          .checked;
+
+      const active =
+        $("taskActive")
+          .checked;
+
+
+      if (!title) {
+        showMessage(
+          "Task title is required.",
+          "error"
+        );
+        return;
+      }
+
+      if (!description) {
+        showMessage(
+          "Task description is required.",
+          "error"
+        );
+        return;
+      }
+
+      if (!platform) {
+        showMessage(
+          "Platform is required.",
+          "error"
+        );
+        return;
+      }
+
+      if (!targetUrl) {
+        showMessage(
+          "Target URL is required.",
+          "error"
+        );
+        return;
+      }
+
+      if (!instructions) {
+        showMessage(
+          "Task instructions are required.",
+          "error"
+        );
+        return;
+      }
+
+      if (
+        !Number.isFinite(reward) ||
+        reward <= 0
+      ) {
+        showMessage(
+          "Enter a valid task reward.",
+          "error"
+        );
+        return;
+      }
+
+
+      const saveButton =
+        $("saveTaskBtn");
+
+      if (saveButton) {
+
+        saveButton.disabled = true;
+
+        saveButton.textContent =
+          "Saving...";
+
+      }
+
+
+      try {
+
+        let result;
+
+
+        if (taskId) {
+
+          result =
+            await supabase.rpc(
+              "admin_update_task",
+              {
+                p_task_id: taskId,
+                p_title: title,
+                p_description: description,
+                p_platform: platform,
+                p_target_name: targetName || null,
+                p_target_url: targetUrl,
+                p_instructions: instructions,
+                p_reward: reward,
+                p_screenshot_required:
+                  screenshotRequired,
+                p_active: active,
+                p_start_date:
+                  startDate,
+                p_end_date:
+                  endDate,
+                p_sort_order:
+                  sortOrder
+              }
+            );
+
+        } else {
+
+          result =
+            await supabase.rpc(
+              "admin_add_task",
+              {
+                p_title: title,
+                p_description: description,
+                p_platform: platform,
+                p_target_name: targetName || null,
+                p_target_url: targetUrl,
+                p_instructions: instructions,
+                p_reward: reward,
+                p_screenshot_required:
+                  screenshotRequired,
+                p_active: active,
+                p_start_date:
+                  startDate,
+                p_end_date:
+                  endDate,
+                p_sort_order:
+                  sortOrder
+              }
+            );
+
+        }
+
+
+        if (result.error) {
+
+          console.error(
+            "saveTask:",
+            result.error
+          );
+
+          showMessage(
+            result.error.message,
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        showMessage(
+          taskId
+            ? "Task updated successfully."
+            : "Task added successfully.",
+          "success"
+        );
+
+
+        closeTaskModal();
+
+        await loadTasks();
+
+      } catch (error) {
+
+        console.error(
+          "saveTask unexpected error:",
+          error
+        );
+
+        showMessage(
+          error.message ||
+          "Something went wrong.",
+          "error"
+        );
+
+      } finally {
+
+        if (saveButton) {
+
+          saveButton.disabled =
+            false;
+
+          saveButton.textContent =
+            "Save Task";
+
+        }
+
+      }
+
+    }
+
+
+    /* =========================
+       TOGGLE TASK STATUS
+       ========================= */
+
+    async function toggleTaskStatus(
+      taskId
+    ) {
+
+      const task =
+        tasksCache.find(
+          item =>
+            item.id === taskId
+        );
+
+      if (!task) {
+        return;
+      }
+
+
+      const newStatus =
+        !task.active;
+
+
+      const confirmed =
+        window.confirm(
+          newStatus
+            ? "Activate this task?"
+            : "Deactivate this task?"
+        );
+
+
+      if (!confirmed) {
+        return;
+      }
+
+
+      const {
+        error
+      } =
+        await supabase.rpc(
+          "admin_set_task_status",
+          {
+            p_task_id: taskId,
+            p_active: newStatus
+          }
+        );
+
+
+      if (error) {
+
+        console.error(
+          "toggleTaskStatus:",
+          error
+        );
+
+        showMessage(
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      showMessage(
+        newStatus
+          ? "Task activated."
+          : "Task deactivated.",
+        "success"
+      );
+
+
+      await loadTasks();
+
+    }
+
+
+    /* =========================
+       DELETE TASK
+       ========================= */
+
+    async function deleteTask(
+      taskId
+    ) {
+
+      const task =
+        tasksCache.find(
+          item =>
+            item.id === taskId
+        );
+
+      if (!task) {
+        return;
+      }
+
+
+      const confirmed =
+        window.confirm(
+          `Delete "${task.title}"? This action cannot be undone.`
+        );
+
+
+      if (!confirmed) {
+        return;
+      }
+
+
+      const {
+        error
+      } =
+        await supabase.rpc(
+          "admin_delete_task",
+          {
+            p_task_id: taskId
+          }
+        );
+
+
+      if (error) {
+
+        console.error(
+          "deleteTask:",
+          error
+        );
+
+        showMessage(
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      showMessage(
+        "Task deleted successfully.",
+        "success"
+      );
+
+
+      await loadTasks();
+
+    }
+
+
+    /* =========================
+       TASK ACTIONS
+       ========================= */
+
+    function handleTaskAction(
+      event
+    ) {
+
+      const button =
+        event.target.closest(
+          "[data-task-action]"
+        );
+
+      if (!button) {
+        return;
+      }
+
+
+      const action =
+        button.dataset.taskAction;
+
+      const taskId =
+        button.dataset.taskId;
+
+
+      const task =
+        tasksCache.find(
+          item =>
+            item.id === taskId
+        );
+
+
+      if (!task) {
+        return;
+      }
+
+
+      if (action === "edit") {
+
+        openEditTaskModal(task);
+
+      } else if (
+        action === "toggle"
+      ) {
+
+        toggleTaskStatus(
+          taskId
+        );
+
+      } else if (
+        action === "delete"
+      ) {
+
+        deleteTask(
+          taskId
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       REGISTERED USERS
+       ========================= */
+
+    async function loadUsers() {
+
+      const container =
+        $("usersContainer");
+
+      if (!container) {
+        return;
+      }
+
+
+      container.innerHTML = `
+        <div class="empty-state">
+          Loading users...-
+        </div>
+      `;
+
+
+      const {
+        data,
+        error
+      } =
+        await supabase.rpc(
+          "admin_get_users"
+        );
+
+
+      if (error) {
+
+        console.error(
+          "loadUsers:",
+          error
+        );
+
+        container.innerHTML = `
+          <div class="empty-state">
+            Failed to load users.
+          </div>
+        `;
+
+        showMessage(
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      usersCache =
+        data || [];
+
+
+      renderUsers();
+
+    }
+
+
+    function renderUsers() {
+
+      const container =
+        $("usersContainer");
+
+      if (!container) {
+        return;
+      }
+
+
+      if (!usersCache.length) {
+
+        container.innerHTML = `
+          <div class="empty-state">
+            No registered users found.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      let html = `
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Activated</th>
+              <th>Admin</th>
+              <th>Created</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+      `;
+
+
+      usersCache.forEach(
+        user => {
+
+          html += `
+
+            <tr>
+
+              <td>
+                ${escapeHtml(
+                  user.username ||
+                  "—"
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  user.email ||
+                  "—"
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  user.phone ||
+                  "—"
+                )}
+              </td>
+
+              <td>
+                ${
+                  user.is_activated
+                    ? statusBadge(
+                        "active"
+                      )
+                    : statusBadge(
+                        "inactive"
+                      )
+                }
+              </td>
+
+              <td>
+                ${
+                  user.is_admin
+                    ? statusBadge(
+                        "active"
+                      )
+                    : "No"
+                }
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  formatDate(
+                    user.created_at
+                  )
+                )}
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      );
+
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+
+      container.innerHTML =
+        html;
+
+    }
+
+
+    /* =========================
+       ACTIVATION PAYMENTS
+       ========================= */
+
+    async function loadActivations() {
+
+      const container =
+        $("activationsContainer");
+
+      if (!container) {
+        return;
+      }
+
+
+      container.innerHTML = `
+        <div class="empty-state">
+          Loading activation payments...
+        </div>
+      `;
+
+
+      const {
+        data,
+        error
+      } =
+        await supabase
+          .from("activation_payments")
+          .select("*")
+          .order(
+            "created_at",
+            {
+              ascending: false
+            }
+          );
+
+
+      if (error) {
+
+        console.error(
+          "loadActivations:",
+          error
+        );
+
+        container.innerHTML = `
+          <div class="empty-state">
+            Failed to load activation payments.
+          </div>
+        `;
+
+        showMessage(
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      activationsCache =
+        data || [];
+
+
+      renderActivations();
+
+    }
+
+
+    function renderActivations() {
+
+      const container =
+        $("activationsContainer");
+
+      if (!container) {
+        return;
+      }
+
+
+      if (
+        !activationsCache.length
+      ) {
+
+        container.innerHTML = `
+          <div class="empty-state">
+            No activation payments found.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      let html = `
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>User</th>
+              <th>Amount</th>
+              <th>Payment Reference</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+      `;
+
+
+      activationsCache.forEach(
+        payment => {
+
+          html += `
+
+            <tr>
+
+              <td>
+                ${escapeHtml(
+                  payment.user_id
+                )}
+              </td>
+
+              <td>
+                ${formatMoney(
+                  payment.amount
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  payment.transaction_reference ||
+                  payment.reference ||
+                  "—"
+                )}
+              </td>
+
+              <td>
+                ${statusBadge(
+                  payment.status
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  formatDate(
+                    payment.created_at
+                  )
+                )}
+              </td>
+
+              <td>
+
+                ${
+                  payment.status ===
+                  "pending"
+                    ? `
+                      <div class="action-group">
+
+                        <button
+                          type="button"
+                          class="btn btn-success"
+                          data-activation-action="approve"
+                          data-activation-id="${escapeHtml(
+                            payment.id
+                          )}"
+                        >
+                          Approve
+                        </button>
+
+                        <button
+                          type="button"
+                          class="btn btn-danger"
+                          data-activation-action="reject"
+                          data-activation-id="${escapeHtml(
+                            payment.id
+                          )}"
+                        >
+                          Reject
+                        </button>
+
+                      </div>
+                    `
+                    : "—"
+                }
+
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      );
+
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+
+      container.innerHTML =
+        html;
+
+    }
+
+ /* =========================
+       ACTIVATION REVIEW
+       ========================= */
+
+    async function reviewActivation(
+      paymentId,
+      decision
+    ) {
+
+      let adminNote = null;
+
+
+      if (decision === "rejected") {
+
+        adminNote =
+          window.prompt(
+            "Optional reason for rejecting this activation payment:"
+          );
+
+      } else {
+
+        const confirmed =
+          window.confirm(
+            "Approve this activation payment?"
+          );
+
+        if (!confirmed) {
+          return;
+        }
+
+      }
+
+
+      const {
+        error
+      } =
+        await supabase.rpc(
+          "review_activation_payment",
+          {
+            p_payment_id:
+              paymentId,
+
+            p_decision:
+              decision,
+
+            p_admin_note:
+              adminNote || null
+          }
+        );
+
+
+      if (error) {
+
+        console.error(
+          "reviewActivation:",
+          error
+        );
+
+        showMessage(
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      showMessage(
+        decision === "approved"
+          ? "Activation payment approved."
+          : "Activation payment rejected.",
+        "success"
+      );
+
+
+      await loadActivations();
+
+      await loadUsers();
+
+      await loadReferrals();
+
+      await refreshDashboard();
+
+    }
+
+
+    function handleActivationAction(
+      event
+    ) {
+
+      const button =
+        event.target.closest(
+          "[data-activation-action]"
+        );
+
+      if (!button) {
+        return;
+      }
+
+
+      const action =
+        button.dataset.activationAction;
+
+      const paymentId =
+        button.dataset.activationId;
+
+
+      if (!paymentId) {
+        return;
+      }
+
+
+      if (
+        action === "approve"
+      ) {
+
+        reviewActivation(
+          paymentId,
+          "approved"
+        );
+
+      } else if (
+        action === "reject"
+      ) {
+
+        reviewActivation(
+          paymentId,
+          "rejected"
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       TASK SUBMISSIONS
+       ========================= */
+
+    async function loadSubmissions() {
+
+      const container =
+        $("submissionsContainer");
+
+      if (!container) {
+        return;
+      }
+
+
+      container.innerHTML = `
+        <div class="empty-state">
+          Loading submissions...
+        </div>
+      `;
+
+
+      const {
+        data,
+        error
+      } =
+        await supabase
+          .from("task_submissions")
+          .select("*")
+          .order(
+            "created_at",
+            {
+              ascending: false
+            }
+          );
+
+
+      if (error) {
+
+        console.error(
+          "loadSubmissions:",
+          error
+        );
+
+        container.innerHTML = `
+          <div class="empty-state">
+            Failed to load submissions.
+          </div>
+        `;
+
+        showMessage(
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      submissionsCache =
+        data || [];
+
+
+      renderSubmissions();
+
+    }
+
+
+    function renderSubmissions() {
+
+      const container =
+        $("submissionsContainer");
+
+      if (!container) {
+        return;
+      }
+
+
+      if (
+        !submissionsCache.length
+      ) {
+
+        container.innerHTML = `
+          <div class="empty-state">
+            No task submissions found.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      let html = `
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>User</th>
+              <th>Task</th>
+              <th>Screenshot</th>
+              <th>Status</th>
+              <th>Notes</th>
+              <th>Created</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+      `;
+
+
+      submissionsCache.forEach(
+        submission => {
+
+          html += `
+
+            <tr>
+
+              <td>
+                ${escapeHtml(
+                  submission.user_id
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  submission.task_id
+                )}
+              </td>
+
+              <td>
+
+                ${
+                  submission.screenshot_url
+                    ? `
+                      <a
+                        href="${escapeHtml(
+                          submission.screenshot_url
+                        )}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn-secondary"
+                      >
+                        View Screenshot
+                      </a>
+                    `
+                    : "No screenshot"
+                }
+
+              </td>
+
+              <td>
+                ${statusBadge(
+                  submission.status
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  submission.notes ||
+                  "—"
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  formatDate(
+                    submission.created_at
+                  )
+                )}
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      );
+
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+
+      container.innerHTML =
+        html;
+
+    }
+
+
+    /* =========================
+       REFERRALS
+       ========================= */
+
+    async function loadReferrals() {
+
+      const container =
+        $("referralsContainer");
+
+      if (!container) {
+        return;
+      }
+
+
+      container.innerHTML = `
+        <div class="empty-state">
+          Loading referrals...
+        </div>
+      `;
+
+
+      const {
+        data,
+        error
+      } =
+        await supabase
+          .from("referrals")
+          .select("*")
+          .order(
+            "created_at",
+            {
+              ascending: false
+            }
+          );
+
+
+      if (error) {
+
+        console.error(
+          "loadReferrals:",
+          error
+        );
+
+        container.innerHTML = `
+          <div class="empty-state">
+            Failed to load referrals.
+          </div>
+        `;
+
+        showMessage(
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      referralsCache =
+        data || [];
+
+
+      renderReferrals();
+
+    }
+
+
+    function renderReferrals() {
+
+      const container =
+        $("referralsContainer");
+
+      if (!container) {
+        return;
+      }
+
+
+      if (
+        !referralsCache.length
+      ) {
+
+        container.innerHTML = `
+          <div class="empty-state">
+            No referrals found.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      let html = `
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>Referrer</th>
+              <th>Referred User</th>
+              <th>Referral Code</th>
+              <th>Reward</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th>Rewarded</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+      `;
+
+
+      referralsCache.forEach(
+        referral => {
+
+          html += `
+
+            <tr>
+
+              <td>
+                ${escapeHtml(
+                  referral.referrer_id
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  referral.referred_user_id
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  referral.referral_code ||
+                  "—"
+                )}
+              </td>
+
+              <td>
+                ${formatMoney(
+                  referral.reward_amount
+                )}
+              </td>
+
+              <td>
+                ${statusBadge(
+                  referral.status
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  formatDate(
+                    referral.created_at
+                  )
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  formatDate(
+                    referral.rewarded_at
+                  )
+                )}
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      );
+
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+
+      container.innerHTML =
+        html;
+
+    }
+
+   /* =========================
+       WITHDRAWALS
+       ========================= */
+
+    async function loadWithdrawals() {
+
+      const container =
+        $("withdrawalsContainer");
+
+      if (!container) {
+        return;
+      }
+
+
+      container.innerHTML = `
+        <div class="empty-state">
+          Loading withdrawals...
+        </div>
+      `;
+
+
+      const {
+        data,
+        error
+      } =
+        await supabase
+          .from("withdrawals")
+          .select("*")
+          .order(
+            "created_at",
+            {
+              ascending: false
+            }
+          );
+
+
+      if (error) {
+
+        console.error(
+          "loadWithdrawals:",
+          error
+        );
+
+        container.innerHTML = `
+          <div class="empty-state">
+            Failed to load withdrawals.
+          </div>
+        `;
+
+        showMessage(
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      withdrawalsCache =
+        data || [];
+
+
+      renderWithdrawals();
+
+    }
+
+
+    function renderWithdrawals() {
+
+      const container =
+        $("withdrawalsContainer");
+
+      if (!container) {
+        return;
+      }
+
+
+      if (
+        !withdrawalsCache.length
+      ) {
+
+        container.innerHTML = `
+          <div class="empty-state">
+            No withdrawal requests found.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      let html = `
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>User</th>
+              <th>Amount</th>
+              <th>Bank Account</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+      `;
+
+
+      withdrawalsCache.forEach(
+        withdrawal => {
+
+          html += `
+
+            <tr>
+
+              <td>
+                ${escapeHtml(
+                  withdrawal.user_id
+                )}
+              </td>
+
+              <td>
+                ${formatMoney(
+                  withdrawal.amount
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  withdrawal.bank_account_id ||
+                  "—"
+                )}
+              </td>
+
+              <td>
+                ${statusBadge(
+                  withdrawal.status
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  formatDate(
+                    withdrawal.created_at
+                  )
+                )}
+              </td>
+
+              <td>
+
+                ${
+                  withdrawal.status ===
+                  "pending"
+                    ? `
+                      <div class="action-group">
+
+                        <button
+                          type="button"
+                          class="btn btn-success"
+                          data-withdrawal-action="approve"
+                          data-withdrawal-id="${escapeHtml(
+                            withdrawal.id
+                          )}"
+                        >
+                          Approve
+                        </button>
+
+                        <button
+                          type="button"
+                          class="btn btn-danger"
+                          data-withdrawal-action="reject"
+                          data-withdrawal-id="${escapeHtml(
+                            withdrawal.id
+                          )}"
+                        >
+                          Reject
+                        </button>
+
+                      </div>
+                    `
+                    : "—"
+                }
+
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      );
+
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+
+      container.innerHTML =
+        html;
+
+    }
+
+
+    /* =========================
+       WITHDRAWAL REVIEW
+       ========================= */
+
+    async function reviewWithdrawal(
+      withdrawalId,
+      decision
+    ) {
+
+      let adminNote = null;
+
+
+      if (
+        decision === "rejected"
+      ) {
+
+        adminNote =
+          window.prompt(
+            "Optional reason for rejecting this withdrawal:"
+          );
+
+      } else {
+
+        const confirmed =
+          window.confirm(
+            "Approve this withdrawal?"
+          );
+
+        if (!confirmed) {
+          return;
+        }
+
+      }
+
+
+      const {
+        error
+      } =
+        await supabase.rpc(
+          "review_withdrawal",
+          {
+            p_withdrawal_id:
+              withdrawalId,
+
+            p_decision:
+              decision,
+
+            p_admin_note:
+              adminNote || null
+          }
+        );
+
+
+      if (error) {
+
+        console.error(
+          "reviewWithdrawal:",
+          error
+        );
+
+        showMessage(
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      showMessage(
+        decision === "approved"
+          ? "Withdrawal approved successfully."
+          : "Withdrawal rejected successfully.",
+        "success"
+      );
+
+
+      await loadWithdrawals();
+
+      await refreshDashboard();
+
+    }
+
+
+    function handleWithdrawalAction(
+      event
+    ) {
+
+      const button =
+        event.target.closest(
+          "[data-withdrawal-action]"
+        );
+
+      if (!button) {
+        return;
+      }
+
+
+      const action =
+        button.dataset.withdrawalAction;
+
+      const withdrawalId =
+        button.dataset.withdrawalId;
+
+
+      if (!withdrawalId) {
+        return;
+      }
+
+
+      if (
+        action === "approve"
+      ) {
+
+        reviewWithdrawal(
+          withdrawalId,
+          "approved"
+        );
+
+      } else if (
+        action === "reject"
+      ) {
+
+        reviewWithdrawal(
+          withdrawalId,
+          "rejected"
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       DASHBOARD REFRESH
+       ========================= */
+
+    async function refreshDashboard() {
+
+      try {
+
+        await Promise.all([
+          loadUsers(),
+          loadTasks(),
+          loadActivations(),
+          loadSubmissions(),
+          loadReferrals(),
+          loadWithdrawals()
+        ]);
+
+
+        const totalUsers =
+          usersCache.length;
+
+        const pendingSubmissions =
+          submissionsCache.filter(
+            item =>
+              item.status ===
+              "under_review"
+          ).length;
+
+        const pendingWithdrawals =
+          withdrawalsCache.filter(
+            item =>
+              item.status ===
+              "pending"
+          ).length;
+
+        const pendingActivations =
+          activationsCache.filter(
+            item =>
+              item.status ===
+              "pending"
+          ).length;
+
+
+        if ($("totalUsersStat")) {
+
+          $("totalUsersStat")
+            .textContent =
+            totalUsers;
+
+        }
+
+
+        if (
+          $("pendingSubmissionsStat")
+        ) {
+
+          $("pendingSubmissionsStat")
+            .textContent =
+            pendingSubmissions;
+
+        }
+
+
+        if (
+          $("pendingWithdrawalsStat")
+        ) {
+
+          $("pendingWithdrawalsStat")
+            .textContent =
+            pendingWithdrawals;
+
+        }
+
+
+        if (
+          $("pendingActivationsStat")
+        ) {
+
+          $("pendingActivationsStat")
+            .textContent =
+            pendingActivations;
+
+        }
+
+
+        const activityContainer =
+          $("dashboardActivityContainer");
+
+
+        if (
+          activityContainer
+        ) {
+
+          activityContainer.innerHTML = `
+
+            <div
+              style="
+                display:grid;
+                grid-template-columns:
+                  repeat(
+                    2,
+                    minmax(0, 1fr)
+                  );
+                gap:12px;
+              "
+            >
+
+              <div
+                style="
+                  padding:15px;
+                  border-radius:12px;
+                  background:#f5f3ff;
+                "
+              >
+                <strong>
+                  ${pendingSubmissions}
+                </strong>
+
+                <div
+                  style="
+                    margin-top:4px;
+                    color:#6b7280;
+                    font-size:12px;
+                  "
+                >
+                  Submissions waiting for review
+                </div>
+              </div>
+
+
+              <div
+                style="
+                  padding:15px;
+                  border-radius:12px;
+                  background:#f5f3ff;
+                "
+              >
+                <strong>
+                  ${pendingWithdrawals}
+                </strong>
+
+                <div
+                  style="
+                    margin-top:4px;
+                    color:#6b7280;
+                    font-size:12px;
+                  "
+                >
+                  Withdrawals waiting for review
+                </div>
+              </div>
+
+
+              <div
+                style="
+                  padding:15px;
+                  border-radius:12px;
+                  background:#f5f3ff;
+                "
+              >
+                <strong>
+                  ${pendingActivations}
+                </strong>
+
+                <div
+                  style="
+                    margin-top:4px;
+                    color:#6b7280;
+                    font-size:12px;
+                  "
+                >
+                  Activations waiting for review
+                </div>
+              </div>
+
+
+              <div
+                style="
+                  padding:15px;
+                  border-radius:12px;
+                  background:#f5f3ff;
+                "
+              >
+                <strong>
+                  ${tasksCache.length}
+                </strong>
+
+                <div
+                  style="
+                    margin-top:4px;
+                    color:#6b7280;
+                    font-size:12px;
+                  "
+                >
+                  Total tasks
+                </div>
+              </div>
+
+            </div>
+
+          `;
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "refreshDashboard:",
+          error
+        );
+
+        showMessage(
+          error.message ||
+          "Failed to refresh dashboard.",
+          "error"
+        );
+
+      }
+
+    }
+
+  /* =========================
+       NAVIGATION
+       ========================= */
+
+    function showSection(
+      sectionId
+    ) {
+
+      document
+        .querySelectorAll(".section")
+        .forEach(section => {
+
+          section.classList.toggle(
+            "active",
+            section.id === sectionId
+          );
+
+        });
+
+
+      document
+        .querySelectorAll(".nav-btn")
+        .forEach(button => {
+
+          button.classList.toggle(
+            "active",
+            button.dataset.section ===
+            sectionId
+          );
+
+        });
+
+
+      const titles = {
+        dashboardSection:
+          "Admin Dashboard",
+
+        tasksSection:
+          "Task Management",
+
+        usersSection:
+          "Registered Users",
+
+        submissionsSection:
+          "Task Submissions",
+
+        withdrawalsSection:
+          "Withdrawal Requests",
+
+        activationsSection:
+          "Activation Payments",
+
+        referralsSection:
+          "Referrals"
+      };
+
+
+      if ($("pageTitle")) {
+
+        $("pageTitle")
+          .textContent =
+          titles[sectionId] ||
+          "Admin Dashboard";
+
+      }
+
+    }
+
+
+    /* =========================
+       EVENT LISTENERS
+       ========================= */
+
+    document
+      .querySelectorAll(".nav-btn")
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            showSection(
+              button.dataset.section
+            );
+
+          }
+        );
+
+      });
+
+
+    $("accessLoginBtn")
+      ?.addEventListener(
+        "click",
+        () => {
+
+          window.location.href =
+            "./login.html";
+
+        }
+      );
+
+
+    $("addTaskBtn")
+      ?.addEventListener(
+        "click",
+        () => {
+
+          openAddTaskModal();
+
+        }
+      );
+
+
+    $("closeTaskModalBtn")
+      ?.addEventListener(
+        "click",
+        () => {
+
+          closeTaskModal();
+
+        }
+      );
+
+
+    $("cancelTaskBtn")
+      ?.addEventListener(
+        "click",
+        () => {
+
+          closeTaskModal();
+
+        }
+      );
+
+
+    $("taskForm")
+      ?.addEventListener(
+        "submit",
+        async event => {
+
+          event.preventDefault();
+
+          await saveTask();
+
+        }
+      );
+
+
+    $("tasksContainer")
+      ?.addEventListener(
+        "click",
+        event => {
+
+          handleTaskAction(
+            event
+          );
+
+        }
+      );
+
+
+    $("activationsContainer")
+      ?.addEventListener(
+        "click",
+        event => {
+
+          handleActivationAction(
+            event
+          );
+
+        }
+      );
+
+
+    $("withdrawalsContainer")
+      ?.addEventListener(
+        "click",
+        event => {
+
+          handleWithdrawalAction(
+            event
+          );
+
+        }
+      );
+
+
+    $("refreshDashboardBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          await refreshDashboard();
+
+          showMessage(
+            "Dashboard refreshed.",
+            "success"
+          );
+
+        }
+      );
+
+
+    $("refreshAllBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          await refreshDashboard();
+
+          showMessage(
+            "All data refreshed.",
+            "success"
+          );
+
+        }
+      );
+
+
+    $("refreshTasksBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          await loadTasks();
+
+          showMessage(
+            "Tasks refreshed.",
+            "success"
+          );
+
+        }
+      );
+
+
+    $("refreshUsersBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          await loadUsers();
+
+          showMessage(
+            "Users refreshed.",
+            "success"
+          );
+
+        }
+      );
+
+
+    $("refreshSubmissionsBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          await loadSubmissions();
+
+          showMessage(
+            "Submissions refreshed.",
+            "success"
+          );
+
+        }
+      );
+
+
+    $("refreshWithdrawalsBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          await loadWithdrawals();
+
+          showMessage(
+            "Withdrawals refreshed.",
+            "success"
+          );
+
+        }
+      );
+
+
+    $("refreshActivationsBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          await loadActivations();
+
+          showMessage(
+            "Activations refreshed.",
+            "success"
+          );
+
+        }
+      );
+
+
+    $("refreshReferralsBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          await loadReferrals();
+
+          showMessage(
+            "Referrals refreshed.",
+            "success"
+          );
+
+        }
+      );
+
+
+    $("logoutBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          const confirmed =
+            window.confirm(
+              "Are you sure you want to log out?"
+            );
+
+          if (!confirmed) {
+            return;
+          }
+
+
+          await supabase.auth.signOut();
+
+          window.location.href =
+            "./login.html";
+
+        }
+      );
+
+
+    /* =========================
+       CLOSE MODAL ON BACKDROP
+       ========================= */
+
+    $("taskModalBackdrop")
+      ?.addEventListener(
+        "click",
+        event => {
+
+          if (
+            event.target ===
+            $("taskModalBackdrop")
+          ) {
+
+            closeTaskModal();
+
+          }
+
+        }
+      );
+
+
+    /* =========================
+       START DASHBOARD
+       ========================= */
+
+    async function startDashboard() {
+
+      const isAdmin =
+        await checkAdmin();
+
+
+      if (!isAdmin) {
+        return;
+      }
+
+
+      await refreshDashboard();
+
+    }
+
+
+    startDashboard();
+
+  </script>
+
+</body>
+</html>

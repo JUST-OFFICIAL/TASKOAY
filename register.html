@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | Task~oay</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6c2bd9, #00b894);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+        }
+
+        .register-card {
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-radius: 22px;
+            padding: 35px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.2);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 800;
+            color: #6c2bd9;
+            margin-bottom: 8px;
+        }
+
+        .logo span {
+            color: #00a884;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #667085;
+            margin-bottom: 28px;
+        }
+
+        .bonus {
+            background: #fff8d8;
+            border: 1px solid #ffe66d;
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+            margin-bottom: 24px;
+            color: #665500;
+        }
+
+        .bonus strong {
+            font-size: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: #172033;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d8dce5;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #6c2bd9;
+            box-shadow: 0 0 0 3px rgba(108,43,217,.1);
+        }
+
+        .register-btn {
+            width: 100%;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #6c2bd9, #00b894);
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .register-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 9px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .message.error {
+            display: block;
+            background: #ffe8e8;
+            color: #a40000;
+        }
+
+        .message.success {
+            display: block;
+            background: #e6fff5;
+            color: #08744d;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 22px;
+            color: #667085;
+        }
+
+        .login-link a {
+            color: #6c2bd9;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #667085;
+            text-decoration: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="register-card">
+
+    <div class="logo">
+        Task<span>~oay</span>
+    </div>
+
+    <p class="subtitle">
+        Create your account and get started
+    </p>
+
+    <div class="bonus">
+        🎁 Welcome bonus: <strong>₦100</strong>
+    </div>
+
+    <form id="registerForm">
+
+        <div class="form-group">
+            <label for="fullName">Full name</label>
+            <input
+                type="text"
+                id="fullName"
+                placeholder="Enter your full name"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input
+                type="email"
+                id="email"
+                placeholder="you@example.com"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone number</label>
+            <input
+                type="tel"
+                id="phone"
+                placeholder="08012345678"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                placeholder="Create a password"
+                minlength="6"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="confirmPassword">Confirm password</label>
+            <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Repeat your password"
+                minlength="6"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="referralCode">
+                Referral code <span style="font-weight:400;color:#888;">(optional)</span>
+            </label>
+
+            <input
+                type="text"
+                id="referralCode"
+                placeholder="Enter referral code"
+            >
+        </div>
+
+        <button
+            type="submit"
+            class="register-btn"
+            id="registerBtn"
+        >
+            Create Account
+        </button>
+
+        <div id="message" class="message"></div>
+
+    </form>
+
+    <div class="login-link">
+        Already have an account?
+        <a href="login.html">Login</a>
+    </div>
+
+    <a href="index.html" class="back">
+        ← Back to Task~oay
+    </a>
+
+</div>
+
+<!-- Supabase JavaScript library -->
+
+<script>
+    console.log("Supabase libary:", window.supabase);
+</script>
+
+
+<!-- Our Supabase connection -->
+<script type="module" src="js/supabase.js"></script>
+
+<script type="module">
+    import { supabase } from "./js/supabase.js";
+    const form = document.getElementById("registerForm");
+    const registerBtn = document.getElementById("registerBtn");
+    const message = document.getElementById("message");
+
+    form.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const fullName =
+            document.getElementById("fullName").value.trim();
+
+        const email =
+            document.getElementById("email").value.trim();
+
+        const phone =
+            document.getElementById("phone").value.trim();
+
+        const password =
+            document.getElementById("password").value;
+
+        const confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+        const referralCode =
+            document.getElementById("referralCode").value.trim();
+
+        message.className = "message";
+        message.textContent = "";
+
+        if (password !== confirmPassword) {
+            message.className = "message error";
+            message.textContent = "Passwords do not match.";
+            return;
+        }
+
+        registerBtn.disabled = true;
+        registerBtn.textContent = "Creating account...";
+
+        try {
+
+            /*
+             * Supabase creates and securely stores the user's
+             * authentication credentials.
+             */
+
+            const { data, error } =
+                await supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            full_name: fullName,
+                            phone: phone,
+                            referral_code: referralCode || null
+                        }
+                    }
+                });
+
+            if (error) {
+                throw error;
+            }
+
+            message.className = "message success";
+
+            message.textContent =
+                "Account created successfully. Check your email if verification is required.";
+
+            form.reset();
+
+        } catch (error) {
+
+            message.className = "message error";
+
+            message.textContent =
+                error.message || "Unable to create your account.";
+
+        } finally {
+
+            registerBtn.disabled = false;
+            registerBtn.textContent = "Create Account";
+
+        }
+
+    });
+</script>
+
+</body>
+</html>

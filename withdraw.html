@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Withdraw - Task~oay</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6ff;
+      color: #222;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #6c5ce7, #8e7dff);
+      color: white;
+      padding: 22px 18px;
+    }
+
+    .header-inner {
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .brand {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .subtitle {
+      margin-top: 6px;
+      opacity: 0.9;
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 20px 15px 40px;
+    }
+
+    .balance-card {
+      background: linear-gradient(135deg, #6c5ce7, #5544d9);
+      color: white;
+      border-radius: 20px;
+      padding: 25px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 10px 25px rgba(70, 50, 180, 0.2);
+    }
+
+    .balance-label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .balance {
+      font-size: 36px;
+      font-weight: bold;
+      margin-top: 7px;
+    }
+
+    .info {
+      background: white;
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .info p {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .form-card {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .section-title {
+      font-size: 20px;
+      margin-bottom: 18px;
+    }
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+      background: white;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #6c5ce7;
+    }
+
+    .withdraw-button {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 15px;
+      background: #6c5ce7;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .withdraw-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      padding: 13px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .error {
+      background: #ffe5e5;
+      color: #a40000;
+    }
+
+    .success {
+      background: #e6f8ec;
+      color: #176b36;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+    }
+
+    .history-title {
+      font-size: 20px;
+      margin: 25px 0 12px;
+    }
+
+    .withdrawal-list {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .withdrawal-item {
+      padding: 16px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .withdrawal-item:last-child {
+      border-bottom: none;
+    }
+
+    .withdrawal-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .withdrawal-amount {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .withdrawal-status {
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+
+    .withdrawal-details {
+      color: #777;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .empty {
+      padding: 25px 15px;
+      text-align: center;
+      color: #888;
+      font-size: 14px;
+    }
+
+    .bottom-nav {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .nav-btn {
+      text-decoration: none;
+      background: white;
+      color: #5544d9;
+      text-align: center;
+      padding: 14px 8px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px 15px;
+      color: #999;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">Task~oay</div>
+      <div class="subtitle">Withdraw your earnings</div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <div id="loading" class="loading">
+      Loading...
+    </div>
+
+    <div id="content" style="display:none;">
+
+      <div id="message" class="message"></div>
+
+      <section class="balance-card">
+        <div class="balance-label">Available Balance</div>
+        <div class="balance" id="balance">₦0</div>
+      </section>
+
+      <section class="info">
+        <p>
+          Minimum withdrawal: <strong>₦6,000</strong><br>
+          Maximum withdrawal: <strong>₦45,000</strong>
+        </p>
+      </section>
+
+      <section class="form-card">
+
+        <h2 class="section-title">Request Withdrawal</h2>
+
+        <form id="withdrawForm">
+
+          <div class="field">
+            <label for="amount">Withdrawal Amount</label>
+            <input
+              type="number"
+              id="amount"
+              min="6000"
+              max="45000"
+              step="100"
+              placeholder="Enter amount"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="bankName">Bank Name</label>
+            <input
+              type="text"
+              id="bankName"
+              placeholder="Enter your bank name"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="accountName">Account Name</label>
+            <input
+              type="text"
+              id="accountName"
+              placeholder="Enter account name"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="accountNumber">Account Number</label>
+            <input
+              type="text"
+              id="accountNumber"
+              inputmode="numeric"
+              maxlength="10"
+              placeholder="Enter 10-digit account number"
+              required
+            >
+          </div>
+
+          <button
+            type="submit"
+            class="withdraw-button"
+            id="withdrawButton"
+          >
+            Submit Withdrawal Request
+          </button>
+
+        </form>
+
+      </section>
+
+      <h2 class="history-title">Withdrawal History</h2>
+
+      <div class="withdrawal-list" id="withdrawalList">
+        <div class="empty">
+          No withdrawal requests yet.
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <a class="nav-btn" href="./start.html">Dashboard</a>
+        <a class="nav-btn" href="./wallet.html">Wallet</a>
+        <a class="nav-btn" href="./profile.html">Profile</a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer>
+    © 2026 Task~oay. All rights reserved.
+  </footer>
+
+
+  <script type="module">
+
+    import { supabase } from "./js/supabase.js";
+
+
+    const loading = document.getElementById("loading");
+    const content = document.getElementById("content");
+    const message = document.getElementById("message");
+
+    const balanceElement = document.getElementById("balance");
+    const amountInput = document.getElementById("amount");
+
+    const bankNameInput = document.getElementById("bankName");
+    const accountNameInput = document.getElementById("accountName");
+    const accountNumberInput = document.getElementById("accountNumber");
+
+    const withdrawForm = document.getElementById("withdrawForm");
+    const withdrawButton = document.getElementById("withdrawButton");
+    const withdrawalList = document.getElementById("withdrawalList");
+
+
+    let currentUser = null;
+    let currentBalance = 0;
+
+
+    function formatMoney(amount) {
+
+      return "₦" + Number(amount || 0).toLocaleString("en-NG", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      });
+
+    }
+
+
+    function showMessage(text, type) {
+
+      message.textContent = text;
+      message.className = "message " + type;
+      message.style.display = "block";
+
+    }
+
+
+    function formatDate(dateString) {
+
+      const date = new Date(dateString);
+
+      return date.toLocaleString("en-NG", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+      });
+
+    }
+
+
+    async function loadWallet() {
+
+      const {
+        data: { user },
+        error: userError
+      } = await supabase.auth.getUser();
+
+
+      if (userError || !user) {
+
+        window.location.href = "./login.html";
+        return;
+
+      }
+
+
+      currentUser = user;
+
+
+      const {
+        data: wallet,
+        error: walletError
+      } = await supabase
+        .from("wallets")
+        .select("balance")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+
+      if (walletError || !wallet) {
+
+        loading.textContent = "Unable to load your wallet.";
+        console.error(walletError);
+        return;
+
+      }
+
+
+      currentBalance = Number(wallet.balance || 0);
+
+      balanceElement.textContent = formatMoney(currentBalance);
+
+
+      await loadWithdrawals();
+
+
+      loading.style.display = "none";
+      content.style.display = "block";
+
+    }
+
+
+    async function loadWithdrawals() {
+
+      const {
+        data: withdrawals,
+        error
+      } = await supabase
+        .from("withdrawals")
+        .select("*")
+        .eq("user_id", currentUser.id)
+        .order("created_at", { ascending: false })
+        .limit(20);
+
+
+      if (error) {
+
+        console.error(error);
+
+        withdrawalList.innerHTML = `
+          <div class="empty">
+            Unable to load withdrawal history.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      if (!withdrawals || withdrawals.length === 0) {
+
+        withdrawalList.innerHTML = `
+          <div class="empty">
+            No withdrawal requests yet.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      withdrawalList.innerHTML = "";
+
+
+      withdrawals.forEach(withdrawal => {
+
+        const item = document.createElement("div");
+
+        item.className = "withdrawal-item";
+
+
+        const amount = Number(
+          withdrawal.amount || 0
+        );
+
+
+        item.innerHTML = `
+          <div class="withdrawal-top">
+
+            <div class="withdrawal-amount">
+              ${formatMoney(amount)}
+            </div>
+
+            <div class="withdrawal-status">
+              ${withdrawal.status || "pending"}
+            </div>
+
+          </div>
+
+          <div class="withdrawal-details">
+            ${withdrawal.bank_name || ""}<br>
+            ${withdrawal.account_name || ""}<br>
+            Account: ${withdrawal.account_number || ""}<br>
+            ${withdrawal.created_at ? formatDate(withdrawal.created_at) : ""}
+          </div>
+        `;
+
+
+        withdrawalList.appendChild(item);
+
+      });
+
+    }
+
+
+    withdrawForm.addEventListener("submit", async (event) => {
+
+      event.preventDefault();
+
+
+      message.style.display = "none";
+
+
+      const amount = Number(amountInput.value);
+      const bankName = bankNameInput.value.trim();
+      const accountName = accountNameInput.value.trim();
+      const accountNumber = accountNumberInput.value.trim();
+
+
+      if (!amount || amount < 6000) {
+
+        showMessage(
+          "The minimum withdrawal amount is ₦6,000.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (amount > 45000) {
+
+        showMessage(
+          "The maximum withdrawal amount is ₦45,000.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (amount > currentBalance) {
+
+        showMessage(
+          "You do not have enough available balance for this withdrawal.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (!/^\d{10}$/.test(accountNumber)) {
+
+        showMessage(
+          "Please enter a valid 10-digit account number.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      withdrawButton.disabled = true;
+      withdrawButton.textContent = "Submitting...";
+
+
+      const { error } = await supabase
+        .from("withdrawals")
+        .insert({
+          user_id: currentUser.id,
+          amount: amount,
+          bank_name: bankName,
+          account_name: accountName,
+          account_number: accountNumber,
+          status: "pending"
+        });
+
+
+      if (error) {
+
+        console.error(error);
+
+        showMessage(
+          "Your withdrawal request could not be submitted. Please try again.",
+          "error"
+        );
+
+        withdrawButton.disabled = false;
+        withdrawButton.textContent = "Submit Withdrawal Request";
+
+        return;
+
+      }
+
+
+      showMessage(
+        "Your withdrawal request has been submitted and is now pending review.",
+        "success"
+      );
+
+
+      withdrawForm.reset();
+
+      withdrawButton.disabled = false;
+      withdrawButton.textContent = "Submit Withdrawal Request";
+
+
+      await loadWithdrawals();
+
+    });
+
+
+    loadWallet();
+
+  </script>
+
+</body>
+</html>

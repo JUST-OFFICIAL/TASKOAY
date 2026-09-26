@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task~oay Dashboard</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #172033;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: #ffffff;
+      padding: 18px 20px;
+      border-bottom: 1px solid #e7eaf0;
+    }
+
+    .header-inner {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .subtitle {
+      margin-top: 5px;
+      color: #697386;
+      font-size: 14px;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 1000px;
+      margin: 25px auto 40px;
+    }
+
+    .welcome-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+    }
+
+    .welcome-card h1 {
+      font-size: 22px;
+      margin-bottom: 7px;
+    }
+
+    .email {
+      color: #697386;
+      font-size: 14px;
+      word-break: break-word;
+    }
+
+    .wallet-card {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white;
+      border-radius: 18px;
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+
+    .wallet-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 8px;
+    }
+
+    .wallet-balance {
+      font-size: 35px;
+      font-weight: 800;
+    }
+
+    .section-title {
+      font-size: 19px;
+      font-weight: 700;
+      margin: 25px 0 12px;
+    }
+
+    .earnings-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .earning-card {
+      background: white;
+      padding: 18px;
+      border-radius: 15px;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.04);
+    }
+
+    .earning-card span {
+      display: block;
+      color: #697386;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .earning-card strong {
+      font-size: 20px;
+    }
+
+    .activities {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.04);
+    }
+
+    .activity {
+      padding: 16px;
+      border-bottom: 1px solid #edf0f4;
+    }
+
+    .activity:last-child {
+      border-bottom: none;
+    }
+
+    .activity-title {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .activity-description {
+      color: #697386;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .activity-amount {
+      margin-top: 6px;
+      font-weight: 700;
+    }
+
+    .empty {
+      padding: 22px;
+      text-align: center;
+      color: #697386;
+      font-size: 14px;
+    }
+
+    .quick-actions {
+      margin-top: 35px;
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+
+    .action {
+      background: white;
+      border: 1px solid #e7eaf0;
+      border-radius: 14px;
+      padding: 17px 8px;
+      text-align: center;
+      text-decoration: none;
+      color: #172033;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .action:hover {
+      background: #f0f3f8;
+    }
+
+    .admin-action {
+      display: none;
+      grid-column: 1 / -1;
+      background: #172033;
+      color: white;
+      border-color: #172033;
+    }
+
+    .admin-action:hover {
+      background: #27334a;
+    }
+
+    footer {
+      text-align: center;
+      color: #8a93a3;
+      font-size: 12px;
+      padding: 30px 10px;
+    }
+
+    @media (max-width: 700px) {
+      .earnings-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .wallet-balance {
+        font-size: 30px;
+      }
+
+      .admin-action {
+        grid-column: 1 / -1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">Task~oay</div>
+      <div class="subtitle">Your earning dashboard</div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="welcome-card">
+      <h1>Welcome, <span id="welcomeName">User</span> 👋</h1>
+      <div class="email" id="userEmail">Loading...</div>
+    </section>
+
+    <section class="wallet-card">
+      <div class="wallet-label">Available Wallet Balance</div>
+      <div class="wallet-balance" id="walletBalance">₦0</div>
+    </section>
+
+    <h2 class="section-title">Earnings Summary</h2>
+
+    <section class="earnings-grid">
+
+      <div class="earning-card">
+        <span>Welcome Bonus</span>
+        <strong>₦100</strong>
+      </div>
+
+      <div class="earning-card">
+        <span>Task Reward</span>
+        <strong>₦250</strong>
+      </div>
+
+      <div class="earning-card">
+        <span>Referral Reward</span>
+        <strong>₦300</strong>
+      </div>
+
+    </section>
+
+    <h2 class="section-title">Recent Activities</h2>
+
+    <section class="activities" id="activities">
+      <div class="empty">Loading activities...</div>
+    </section>
+
+    <section class="quick-actions">
+
+      <h2 class="section-title">Quick Actions</h2>
+
+      <div class="actions-grid">
+
+        <a href="./tasks.html" class="action">
+          Tasks
+        </a>
+
+        <a href="./wallet.html" class="action">
+          Wallet
+        </a>
+
+        <a href="./referrals.html" class="action">
+          Referrals
+        </a>
+
+        <a href="./withdraw.html" class="action">
+          Withdraw
+        </a>
+        
+        <a href="./activate.html" class="action">
+          Activate Account
+        </a>
+
+        <a href="./profile.html" class="action">
+          Profile
+        </a>
+
+        <a
+          href="./admin.html"
+          class="action admin-action"
+          id="adminDashboardBtn"
+        >
+          🛠️ Admin Dashboard
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    © 2026 Task~oay. All rights reserved.
+  </footer>
+
+  <script type="module">
+
+    import { supabase } from "./js/supabase.js";
+
+    async function loadDashboard() {
+
+      const {
+        data: { session },
+        error: sessionError
+      } = await supabase.auth.getSession();
+
+      if (sessionError || !session) {
+        window.location.href = "./login.html";
+        return;
+      }
+
+      const user = session.user;
+
+      document.getElementById("userEmail").textContent =
+        user.email || "";
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("full_name, is_admin")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (profile && profile.full_name) {
+        document.getElementById("welcomeName").textContent =
+          profile.full_name;
+      }
+
+      /*
+       * Show Admin Dashboard only to users
+       * whose profile has is_admin = true.
+       */
+      const adminButton =
+        document.getElementById("adminDashboardBtn");
+
+      if (profile?.is_admin === true) {
+        adminButton.style.display = "block";
+      }
+
+      const { data: wallet } = await supabase
+        .from("wallets")
+        .select("balance")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (wallet) {
+        document.getElementById("walletBalance").textContent =
+          "₦" + Number(wallet.balance || 0).toLocaleString();
+      }
+
+      const { data: activities, error: activitiesError } =
+        await supabase
+          .from("recent_activities")
+          .select("*")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(10);
+
+      const activitiesContainer =
+        document.getElementById("activities");
+
+      if (
+        activitiesError ||
+        !activities ||
+        activities.length === 0
+      ) {
+
+        activitiesContainer.innerHTML = `
+          <div class="empty">
+            No recent activities yet.
+          </div>
+        `;
+
+        return;
+      }
+
+      activitiesContainer.innerHTML = activities.map(activity => {
+
+        const amount = Number(activity.amount || 0);
+
+        return `
+          <div class="activity">
+
+            <div class="activity-title">
+              ${activity.title || "Activity"}
+            </div>
+
+            <div class="activity-description">
+              ${activity.description || ""}
+            </div>
+
+            ${
+              amount !== 0
+              ? `<div class="activity-amount">
+                   ₦${amount.toLocaleString()}
+                 </div>`
+              : ""
+            }
+
+          </div>
+        `;
+
+      }).join("");
+    }
+
+    loadDashboard();
+
+  </script>
+
+</body>
+</html>

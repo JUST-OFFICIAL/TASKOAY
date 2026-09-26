@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Task~oay | Earn From Simple Tasks</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f9fc;
+            color: #172033;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6c2bd9, #00b894);
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: #ffe66d;
+        }
+
+        .login-btn {
+            text-decoration: none;
+            color: white;
+            border: 1px solid rgba(255,255,255,.6);
+            padding: 10px 18px;
+            border-radius: 25px;
+        }
+
+        .hero {
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 50px;
+            padding: 70px 7%;
+            background: linear-gradient(135deg, #6c2bd9, #00b894);
+            color: white;
+        }
+
+        .hero-text {
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: clamp(42px, 6vw, 70px);
+            line-height: 1.05;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 span {
+            color: #ffe66d;
+        }
+
+        .hero p {
+            font-size: 19px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            color: rgba(255,255,255,.9);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            display: inline-block;
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .primary-btn {
+            background: #ffe66d;
+            color: #172033;
+        }
+
+        .secondary-btn {
+            border: 1px solid rgba(255,255,255,.7);
+            color: white;
+        }
+
+        .hero-card {
+            background: white;
+            color: #172033;
+            width: 330px;
+            padding: 30px;
+            border-radius: 22px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.2);
+        }
+
+        .hero-card h3 {
+            margin-bottom: 20px;
+        }
+
+        .balance {
+            font-size: 38px;
+            font-weight: 800;
+            color: #6c2bd9;
+            margin-bottom: 20px;
+        }
+
+        .mini-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .mini-row:last-child {
+            border-bottom: none;
+        }
+
+        .features {
+            padding: 80px 7%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .section-title p {
+            color: #667085;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .feature {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(23,32,51,.07);
+        }
+
+        .icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: #eee8ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            margin-bottom: 20px;
+        }
+
+        .feature h3 {
+            margin-bottom: 12px;
+        }
+
+        .feature p {
+            color: #667085;
+            line-height: 1.6;
+        }
+
+        .how {
+            background: #172033;
+            color: white;
+            padding: 80px 7%;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 45px;
+        }
+
+        .step {
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 18px;
+        }
+
+        .step-number {
+            font-size: 14px;
+            color: #ffe66d;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .step p {
+            color: #c7ccda;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        footer {
+            background: #0f1522;
+            color: #aeb5c5;
+            text-align: center;
+            padding: 30px 7%;
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .buttons {
+                justify-content: center;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .hero-card {
+                width: 100%;
+                max-width: 380px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding-top: 50px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Task<span>~oay</span></div>
+
+    <a href="login.html" class="login-btn">
+        Login
+    </a>
+</header>
+
+<section class="hero">
+
+    <div class="hero-text">
+
+        <h1>
+            Turn simple tasks into <span>rewards.</span>
+        </h1>
+
+        <p>
+            Complete available tasks, submit your evidence,
+            build your wallet balance and track your activities
+            from one simple dashboard.
+        </p>
+
+        <div class="buttons">
+
+            <a href="register.html" class="primary-btn">
+                Create Account
+            </a>
+
+            <a href="login.html" class="secondary-btn">
+                Login
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="hero-card">
+
+        <h3>Wallet Preview</h3>
+
+        <div class="balance">
+            ₦100.00
+        </div>
+
+        <div class="mini-row">
+            <span>Welcome Bonus</span>
+            <strong>₦100</strong>
+        </div>
+
+        <div class="mini-row">
+            <span>Task Reward</span>
+            <strong>₦250</strong>
+        </div>
+
+        <div class="mini-row">
+            <span>Referral</span>
+            <strong>₦300</strong>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="features">
+
+    <div class="section-title">
+
+        <h2>Everything in one place</h2>
+
+        <p>
+            Manage tasks, rewards and your account from your dashboard.
+        </p>
+
+    </div>
+
+    <div class="feature-grid">
+
+        <div class="feature">
+
+            <div class="icon">✓</div>
+
+            <h3>Simple Tasks</h3>
+
+            <p>
+                Browse available tasks and follow the instructions
+                provided for each task.
+            </p>
+
+        </div>
+
+        <div class="feature">
+
+            <div class="icon">₦</div>
+
+            <h3>Wallet Tracking</h3>
+
+            <p>
+                Keep track of your approved rewards and wallet activity
+                in one place.
+            </p>
+
+        </div>
+
+        <div class="feature">
+
+            <div class="icon">↗</div>
+
+            <h3>Referral Rewards</h3>
+
+            <p>
+                Invite people using your referral link and track
+                eligible referral rewards.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="how">
+
+    <div class="section-title">
+
+        <h2>How it works</h2>
+
+        <p>
+            A simple process from registration to task submission.
+        </p>
+
+    </div>
+
+    <div class="steps">
+
+        <div class="step">
+            <div class="step-number">STEP 01</div>
+            <h3>Create an account</h3>
+            <p>
+                Register your Task~oay account.
+            </p>
+        </div>
+
+        <div class="step">
+            <div class="step-number">STEP 02</div>
+            <h3>Activate</h3>
+            <p>
+                Activate your account to access the earning tasks.
+            </p>
+        </div>
+
+        <div class="step">
+            <div class="step-number">STEP 03</div>
+            <h3>Complete tasks</h3>
+            <p>
+                Complete available tasks and submit your evidence.
+            </p>
+        </div>
+
+        <div class="step">
+            <div class="step-number">STEP 04</div>
+            <h3>Get rewarded</h3>
+            <p>
+                Approved task rewards are added to your wallet.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+
+    <p>
+        © 2026 Task~oay. All rights reserved.
+    </p>
+
+</footer>
+
+</body>
+</html>

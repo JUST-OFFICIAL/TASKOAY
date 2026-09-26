@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - Task~oay</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6ff;
+      color: #222;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #6c5ce7, #8e7dff);
+      color: white;
+      padding: 22px 18px;
+    }
+
+    .header-inner {
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .brand {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .subtitle {
+      margin-top: 6px;
+      opacity: 0.9;
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 20px 15px 40px;
+    }
+
+    .profile-card {
+      background: white;
+      border-radius: 20px;
+      padding: 25px 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      margin-bottom: 18px;
+    }
+
+    .profile-top {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 20px;
+    }
+
+    .profile-icon {
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6c5ce7, #8e7dff);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    .profile-name {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .profile-email {
+      color: #777;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .section-title {
+      font-size: 19px;
+      margin-bottom: 15px;
+    }
+
+    .info-row {
+      padding: 13px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      color: #888;
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .info-value {
+      font-size: 15px;
+      font-weight: bold;
+      word-break: break-word;
+    }
+
+    .referral-card {
+      background: linear-gradient(135deg, #6c5ce7, #5544d9);
+      color: white;
+      border-radius: 18px;
+      padding: 22px 18px;
+      margin-bottom: 18px;
+    }
+
+    .referral-title {
+      font-size: 19px;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    .referral-text {
+      font-size: 13px;
+      opacity: 0.9;
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
+
+    .referral-code-box {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 13px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .copy-button {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 10px;
+      background: white;
+      color: #5544d9;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .copy-button:active {
+      transform: scale(0.98);
+    }
+
+    .referral-link-box {
+      margin-top: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 12px;
+      word-break: break-all;
+      line-height: 1.5;
+    }
+
+    .nav-section {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .nav-btn {
+      text-decoration: none;
+      background: white;
+      color: #5544d9;
+      text-align: center;
+      padding: 14px 8px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .logout-button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      background: white;
+      color: #d63031;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .message {
+      display: none;
+      padding: 13px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .error {
+      background: #ffe5e5;
+      color: #a40000;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px 15px;
+      color: #999;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">Task~oay</div>
+      <div class="subtitle">Your profile</div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <div id="loading" class="loading">
+      Loading your profile...
+    </div>
+
+    <div id="content" style="display:none;">
+
+      <div id="message" class="message"></div>
+
+      <section class="profile-card">
+
+        <div class="profile-top">
+
+          <div class="profile-icon" id="profileIcon">
+            U
+          </div>
+
+          <div class="profile-name" id="profileName">
+            User
+          </div>
+
+          <div class="profile-email" id="profileEmail">
+            —
+          </div>
+
+        </div>
+
+        <h2 class="section-title">
+          Account Information
+        </h2>
+
+        <div class="info-row">
+          <div class="info-label">Username</div>
+          <div class="info-value" id="username">—</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Phone Number</div>
+          <div class="info-value" id="phone">—</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Email Address</div>
+          <div class="info-value" id="email">—</div>
+        </div>
+
+      </section>
+
+
+      <section class="referral-card">
+
+        <div class="referral-title">
+          Refer & Earn
+        </div>
+
+        <div class="referral-text">
+          Invite friends to Task~oay using your referral code and earn ₦300 for each qualified referral.
+        </div>
+
+        <div class="referral-code-box" id="referralCode">
+          Loading...
+        </div>
+
+        <button class="copy-button" id="copyCodeButton">
+          Copy Referral Code
+        </button>
+
+        <div class="referral-link-box" id="referralLink">
+          Loading referral link...
+        </div>
+
+        <button class="copy-button" id="copyLinkButton" style="margin-top:10px;">
+          Copy Referral Link
+        </button>
+
+      </section>
+
+
+      <div class="nav-section">
+
+        <a class="nav-btn" href="./start.html">
+          Dashboard
+        </a>
+
+        <a class="nav-btn" href="./tasks.html">
+          Tasks
+        </a>
+
+        <a class="nav-btn" href="./wallet.html">
+          Wallet
+        </a>
+
+      </div>
+
+
+      <button class="logout-button" id="logoutButton">
+        Log Out
+      </button>
+
+    </div>
+
+  </main>
+
+
+  <footer>
+    © 2026 Task~oay. All rights reserved.
+  </footer>
+
+
+  <script type="module">
+
+    import { supabase } from "./js/supabase.js";
+
+
+    const loading = document.getElementById("loading");
+    const content = document.getElementById("content");
+    const message = document.getElementById("message");
+
+    const profileIcon = document.getElementById("profileIcon");
+    const profileName = document.getElementById("profileName");
+    const profileEmail = document.getElementById("profileEmail");
+
+    const username = document.getElementById("username");
+    const phone = document.getElementById("phone");
+    const email = document.getElementById("email");
+
+    const referralCode = document.getElementById("referralCode");
+    const referralLink = document.getElementById("referralLink");
+
+    const copyCodeButton = document.getElementById("copyCodeButton");
+    const copyLinkButton = document.getElementById("copyLinkButton");
+
+    const logoutButton = document.getElementById("logoutButton");
+
+
+    let currentReferralCode = "";
+    let currentReferralLink = "";
+
+
+    function showError(text) {
+
+      message.textContent = text;
+      message.className = "message error";
+      message.style.display = "block";
+
+    }
+
+
+    async function loadProfile() {
+
+      const {
+        data: { user },
+        error: userError
+      } = await supabase.auth.getUser();
+
+
+      if (userError || !user) {
+
+        window.location.href = "./login.html";
+        return;
+
+      }
+
+
+      const {
+        data: profile,
+        error: profileError
+      } = await supabase
+        .from("profiles")
+        .select("full_name, username, phone, referral_code")
+        .eq("id", user.id)
+        .maybeSingle();
+
+
+      if (profileError) {
+
+        console.error(profileError);
+
+        loading.style.display = "none";
+
+        showError("Unable to load your profile.");
+
+        return;
+
+      }
+
+
+      const name = profile?.full_name || "Task~oay User";
+
+      const userPhone = profile?.phone || "Not set";
+
+      const userEmail = user.email || "Not available";
+
+      const code = profile?.referral_code || "Not available";
+
+
+      profileName.textContent = name;
+      profileEmail.textContent = userEmail;
+
+      /*
+        The registered Full Name is used as the Username.
+        The database username field is not used here.
+      */
+      username.textContent = name;
+
+      phone.textContent = userPhone;
+      email.textContent = userEmail;
+
+
+      profileIcon.textContent =
+        name.charAt(0).toUpperCase();
+
+
+      currentReferralCode = code;
+
+      referralCode.textContent = code;
+
+
+      currentReferralLink =
+        window.location.origin +
+        "/register.html?ref=" +
+        encodeURIComponent(code);
+
+
+      referralLink.textContent = currentReferralLink;
+
+
+      loading.style.display = "none";
+      content.style.display = "block";
+
+    }
+
+
+    copyCodeButton.addEventListener("click", async () => {
+
+      if (!currentReferralCode) {
+        return;
+      }
+
+      try {
+
+        await navigator.clipboard.writeText(
+          currentReferralCode
+        );
+
+        copyCodeButton.textContent = "Copied!";
+
+        setTimeout(() => {
+          copyCodeButton.textContent =
+            "Copy Referral Code";
+        }, 1500);
+
+      } catch (error) {
+
+        showError(
+          "Unable to copy automatically. Please copy the referral code manually."
+        );
+
+      }
+
+    });
+
+
+    copyLinkButton.addEventListener("click", async () => {
+
+      if (!currentReferralLink) {
+        return;
+      }
+
+      try {
+
+        await navigator.clipboard.writeText(
+          currentReferralLink
+        );
+
+        copyLinkButton.textContent = "Copied!";
+
+        setTimeout(() => {
+          copyLinkButton.textContent =
+            "Copy Referral Link";
+        }, 1500);
+
+      } catch (error) {
+
+        showError(
+          "Unable to copy automatically. Please copy the referral link manually."
+        );
+
+      }
+
+    });
+
+
+    logoutButton.addEventListener("click", async () => {
+
+      const { error } = await supabase.auth.signOut();
+
+      if (error) {
+
+        console.error(error);
+
+        showError("Unable to log out. Please try again.");
+
+        return;
+
+      }
+
+      window.location.href = "./login.html";
+
+    });
+
+
+    loadProfile();
+
+  </script>
+
+</body>
+</html>

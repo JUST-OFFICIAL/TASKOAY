@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Referrals - Task~oay</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f4f0ff, #eef6ff);
+      color: #222;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      padding: 22px 18px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+    }
+
+    header h1 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 25px auto;
+      padding: 0 16px 30px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .card h2 {
+      color: #5b16c9;
+      font-size: 21px;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .reward {
+      text-align: center;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+    }
+
+    .reward h2 {
+      color: white;
+    }
+
+    .reward-amount {
+      font-size: 34px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .referral-box {
+      background: #f5f3ff;
+      border: 1px solid #ddd5ff;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 14px;
+      word-break: break-all;
+      color: #4d16a8;
+      font-weight: bold;
+    }
+
+    .copy-btn {
+      width: 100%;
+      margin-top: 12px;
+      border: none;
+      border-radius: 10px;
+      padding: 13px;
+      background: #6a11cb;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background: #5310a2;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .stat {
+      background: #f7f7fb;
+      border-radius: 14px;
+      padding: 18px 10px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 25px;
+      font-weight: bold;
+      color: #5b16c9;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #666;
+    }
+
+    .referral-item {
+      border-bottom: 1px solid #eee;
+      padding: 13px 0;
+    }
+
+    .referral-item:last-child {
+      border-bottom: none;
+    }
+
+    .referral-name {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .referral-date {
+      font-size: 12px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 15px 0;
+      color: #888;
+    }
+
+    .back-btn {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      background: white;
+      color: #5b16c9;
+      border: 1px solid #ddd5ff;
+      padding: 13px;
+      border-radius: 12px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    footer {
+      text-align: center;
+      color: #777;
+      font-size: 13px;
+      padding: 20px;
+    }
+
+    @media (max-width: 500px) {
+      header h1 {
+        font-size: 24px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Task~oay</h1>
+    <p>Referral Program</p>
+  </header>
+
+  <div class="container">
+
+    <div class="card reward">
+      <h2>Refer a Friend and Earn</h2>
+
+      <div class="reward-amount">₦300</div>
+
+      <p style="color:white;">
+        Refer a friend to Task-oay. When they sign up 
+        and activate thier account, you earn 300 naira
+      </p>
+    </div>
+
+    <div class="card">
+
+      <h2>Your Referral Code</h2>
+
+      <p>
+        Share your referral code with friends. When they register using your
+        referral link and become a qualified referral, you earn your reward.
+      </p>
+
+      <div class="referral-box" id="referralCode">
+        Loading...
+      </div>
+
+      <button class="copy-btn" id="copyCodeBtn">
+        Copy Referral Code
+      </button>
+
+    </div>
+
+    <div class="card">
+
+      <h2>Your Referral Link</h2>
+
+      <p>
+        Copy this link and send it to people you want to invite.
+      </p>
+
+      <div class="referral-box" id="referralLink">
+        Loading...
+      </div>
+
+      <button class="copy-btn" id="copyLinkBtn">
+        Copy Referral Link
+      </button>
+
+    </div>
+
+    <div class="card">
+
+      <h2>Referral Statistics</h2>
+
+      <div class="stats">
+
+        <div class="stat">
+          <div class="stat-number" id="totalReferrals">0</div>
+          <div class="stat-label">Total Referrals</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number" id="referralEarnings">₦0</div>
+          <div class="stat-label">Referral Earnings</div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <h2>People You Referred</h2>
+
+      <div id="referralList">
+        <div class="empty">Loading...</div>
+      </div>
+
+    </div>
+
+    <a href="./start.html" class="back-btn">
+      ← Back to Dashboard
+    </a>
+
+  </div>
+
+  <footer>
+    © 2026 Task~oay. All rights reserved.
+  </footer>
+
+  <script type="module">
+
+    import { supabase } from "./js/supabase.js";
+
+    const referralCode = document.getElementById("referralCode");
+    const referralLink = document.getElementById("referralLink");
+    const totalReferrals = document.getElementById("totalReferrals");
+    const referralEarnings = document.getElementById("referralEarnings");
+    const referralList = document.getElementById("referralList");
+
+    const copyCodeBtn = document.getElementById("copyCodeBtn");
+    const copyLinkBtn = document.getElementById("copyLinkBtn");
+
+    let currentReferralCode = "";
+    let currentReferralLink = "";
+
+    async function loadReferrals() {
+
+      const {
+        data: { user },
+        error: userError
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        window.location.href = "./login.html";
+        return;
+      }
+
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("referral_code")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (profileError) {
+        console.error(profileError);
+        referralCode.textContent = "Unable to load";
+        referralLink.textContent = "Unable to load";
+        return;
+      }
+
+      currentReferralCode = profile?.referral_code || "";
+
+      if (!currentReferralCode) {
+        referralCode.textContent = "No referral code";
+        referralLink.textContent = "No referral link";
+        return;
+      }
+
+      currentReferralLink =
+        window.location.origin +
+        "/register.html?ref=" +
+        encodeURIComponent(currentReferralCode);
+
+      referralCode.textContent = currentReferralCode;
+      referralLink.textContent = currentReferralLink;
+
+      const { data: referrals, error: referralsError } = await supabase
+        .from("referrals")
+        .select("*")
+        .eq("referrer_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (referralsError) {
+        console.error(referralsError);
+        referralList.innerHTML =
+          '<div class="empty">Unable to load referrals.</div>';
+        return;
+      }
+
+      const referralRows = referrals || [];
+
+      totalReferrals.textContent = referralRows.length;
+
+      const totalEarned = referralRows
+        .filter(row => row.status === "qualified" || row.status === "approved")
+        .reduce((sum, row) => sum + Number(row.reward || 300), 0);
+
+      referralEarnings.textContent =
+        "₦" + totalEarned.toLocaleString();
+
+      if (referralRows.length === 0) {
+        referralList.innerHTML =
+          '<div class="empty">You have no referrals yet.</div>';
+        return;
+      }
+
+      referralList.innerHTML = "";
+
+      referralRows.forEach(row => {
+
+        const item = document.createElement("div");
+        item.className = "referral-item";
+
+        const status = row.status || "pending";
+
+        item.innerHTML = `
+          <div class="referral-name">
+            Referral
+          </div>
+
+          <div class="referral-date">
+            Status: ${status}
+          </div>
+
+          <div class="referral-date">
+            ${new Date(row.created_at).toLocaleString()}
+          </div>
+        `;
+
+        referralList.appendChild(item);
+
+      });
+    }
+
+    copyCodeBtn.addEventListener("click", async () => {
+
+      if (!currentReferralCode) return;
+
+      try {
+
+        await navigator.clipboard.writeText(currentReferralCode);
+
+        copyCodeBtn.textContent = "Copied!";
+
+        setTimeout(() => {
+          copyCodeBtn.textContent = "Copy Referral Code";
+        }, 1500);
+
+      } catch (error) {
+        alert("Unable to copy. Please copy the code manually.");
+      }
+
+    });
+
+    copyLinkBtn.addEventListener("click", async () => {
+
+      if (!currentReferralLink) return;
+
+      try {
+
+        await navigator.clipboard.writeText(currentReferralLink);
+
+        copyLinkBtn.textContent = "Copied!";
+
+        setTimeout(() => {
+          copyLinkBtn.textContent = "Copy Referral Link";
+        }, 1500);
+
+      } catch (error) {
+        alert("Unable to copy. Please copy the link manually.");
+      }
+
+    });
+
+    loadReferrals();
+
+  </script>
+
+</body>
+</html>
